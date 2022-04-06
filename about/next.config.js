@@ -1,6 +1,15 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-}
+const { withFederatedSidecar } = require('@module-federation/nextjs-mf');
+const packageJson = require('./package.json');
 
-module.exports = nextConfig
+/** @type {import('next').NextConfig} */
+module.exports = withFederatedSidecar({
+  name: 'about',
+  filename: 'static/chunks/remoteEntry.js',
+  remotes: {},
+  exposes: {
+    './about': './modules/about.js',
+  },
+  shared: packageJson.dependencies,
+})({
+  reactStrictMode: true,
+});
